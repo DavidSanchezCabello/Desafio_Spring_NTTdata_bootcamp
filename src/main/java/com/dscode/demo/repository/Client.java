@@ -25,6 +25,7 @@ public class Client implements Serializable{
 	private String surname2;
 	private String datebirth;
 	private String dni;
+	
 	public int getId() {
 		return id;
 	}
@@ -61,10 +62,11 @@ public class Client implements Serializable{
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	
 	@Override
 	public String toString() {
-		return "Client [name=" + name + ", surname1=" + surname1 + ", surname2=" + surname2 + "]";
+		return "Client [id=" + id + ", name=" + name + ", surname1=" + surname1 + ", surname2=" + surname2
+				+ ", datebirth=" + datebirth + ", dni=" + dni + "]";
 	}
+	
 	
 }
