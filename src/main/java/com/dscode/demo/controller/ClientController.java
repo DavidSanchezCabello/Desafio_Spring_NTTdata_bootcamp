@@ -8,12 +8,13 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,9 @@ import com.dscode.demo.services.ClientServiceI;
 @RequestMapping("/api/clients") // http://localhost:8080/api/clients
 public class ClientController {
 
+	// Sirve para el muestreo de nuestro log al ejecutar el CRUD
+	private final Logger logg = LoggerFactory.getLogger(Client.class);
+	
 	@Autowired
 	private ClientServiceI clientService;
 
@@ -93,20 +97,43 @@ public class ClientController {
 		return clients;
 	}
 	
-	// Mostrar interfaz
-	@GetMapping("/findAll")
+	// Mostrar tabla listado clientes
+	@GetMapping("/listClients")
 	@ExceptionHandler(IOException.class)
 	public String findAll(Model model) {
-		List<Client> clientes = (List<Client>) clientService.findAll();
-		model.addAttribute("clientes", clientes);
+		model.addAttribute("clientes", clientService.findAll());
+		logg.info("Información del objeto Client, {}", model);
 		return "index";
 	}
 	
-	@GetMapping("/new")
+	// Formulario crear cliente
+	@GetMapping("/newClient") //http://localhost:8080/api/client/create
 	@ExceptionHandler(IOException.class)
-	public String agregar(Model model) {
+	public String newClient(Model model) {		
 		model.addAttribute("cliente", new Client());
+		logg.info("Información del objeto Client, {}", model);
 		return "form";
 	}
 	
+	// Guardar cliente
+	@PostMapping("/saveClient")
+	public String saveClient(Client client) {
+		logg.info("Información del objeto Client, {}", client);
+		clientService.createOrUpdate(client);
+		return "redirect:/api/clients/listClients";
+	}
+	
+//	// Editar cliente
+//	@GetMapping("/editClient")
+//	public String editClient() {
+//		return "edit";
+//	}
+	
+	// Eliminar cliente
+	@PostMapping("/deleteClient")
+	public String borrarCliente(Integer clientId) {
+		logg.info("Información del objeto Client, {}", clientId);
+		clientService.deleteById(clientId);
+		return "redirect:/api/clients/listClients";
+	}
 }
