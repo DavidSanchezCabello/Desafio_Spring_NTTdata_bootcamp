@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.dscode.demo.repository.Client;
+import com.dscode.demo.repository.ClientRepository;
 import com.dscode.demo.services.ClientServiceI;
 
 @Controller
@@ -36,6 +37,9 @@ public class ClientController {
 	
 	@Autowired
 	private ClientServiceI clientService;
+	
+	@Autowired
+	private ClientRepository clientRepository;
 
 	// Create a new client
 	@PostMapping("/save")
@@ -124,8 +128,10 @@ public class ClientController {
 	}
 	
 //	// Editar cliente
-//	@GetMapping("/editClient")
-//	public String editClient() {
+//	@GetMapping("/editClient/{id}")
+//	public String editClient(@PathVariable Integer clientId) {
+//		Optional<Client> cli = clientService.findById(clientId);
+//		logg.info("Objeto recuperado {}",cli.getClass());		
 //		return "edit";
 //	}
 	
